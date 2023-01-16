@@ -53,36 +53,40 @@
       </div>
     </div>
 
+    <div class="main" ng-controller="MainController">
+      <div class="container">
+        <h1>{{ title }}</h1>
+        <h2>{{ promo }}</h2>
+
+        <div ng-repeat="product in products" class="col-md-6">
+            
+          <div class="thumbnail">
+                <img ng-src="{{ product.cover }}" />     
+            <p class="title">{{ product.name }}</p>
+                
+            <p class="price">{{ product.price | currency }}</p>
+                
+            <p class="date">{{ product.pubdate | date }}</p>
+            <div class="rating">
+                
+              <p class="likes" ng-click="plusOne($index)">
+                + {{ product.likes }}
+              </p>
+              <p class="dislikes" ng-click="minusOne($index)">
+                - {{ product.dislikes }}
+              </p>
+            </div>
+              
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- FOOTER  -->
     <div id="footer_wrap" class="outer">
       <footer class="inner">
         <p>Published with <a href="https://pages.github.com">GitHub Pages</a></p>
       </footer>
-    </div>
-
-    <div class="main" ng-controller="MainController">
-      <div class="container">
-         <div class="card">
-          <img class="icon" ng-src="{{ move.icon }}">
-          <h2 class="title">{{ move.title }}</h2>
-          <p class="developer">{{ move.developer }}</p>
-          <p class="price">{{ move.price | currency }}</p>
-        </div>
-
-        <div class="card">
-          <img class="icon" ng-src="{{ shutterbugg.icon }}">
-          <h2 class="title">{{ shutterbugg.title }}</h2>
-          <p class="developer">{{ shutterbugg.developer }}</p>
-          <p class="price">{{ shutterbugg.price | currency }}</p>
-        </div>
-
-        <div class="card">
-          <img class="icon" ng-src="{{ gameboard.icon }}">
-          <h2 class="title">{{ gameboard.title }}</h2>
-          <p class="developer">{{ gameboard.developer }}</p>
-          <p class="price">{{ gameboard.price | currency }}</p>
-        </div>
-      </div>
     </div>
 
     <!-- Modules -->
@@ -92,7 +96,7 @@
    <script src="js/controllers/MainController.js"></script>
 
    <!-- Directives -->
-   
+
    <!-- Chart JS -->
    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
    <!-- Chart JS Plugin for displaying text over chart -->
