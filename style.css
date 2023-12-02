@@ -1,0 +1,158 @@
+.w3-container .volume-slider {
+    width: 200px;
+}
+
+.w3-container .mute-btn .fa-volume-mute {
+    display: none;
+}
+
+.w3-container .mute-btn.muted .fa-volume-mute {
+    display: inline-block;
+}
+
+.w3-container .mute-btn.muted .fa-volume-up {
+    display: none;
+}
+
+.w3-table-all td {
+    vertical-align: baseline !important;
+}
+
+
+
+tbody {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 14px;
+    line-height: 1.42857143;
+    color: #333;
+}
+
+.table tbody tr td {
+    padding: 8px;
+    line-height: 1.42857143;
+    vertical-align: top;
+    border-top: 1px solid #ddd;
+}
+
+.table tbody tr.success {
+    background-color: #dff0d8;
+}
+
+
+.table thead tr th {
+    padding: 8px;
+    line-height: 1.42857143;
+    vertical-align: top;
+    border-top: 1px solid #ddd;
+    border-bottom: 2px solid #ddd;
+}
+
+.table-striped tbody tr:nth-of-type(2n+1) {
+    background-color: #f9f9f9;
+}
+
+.table-hover tbody tr.success:hover td {
+    background-color: #d0e9c6;
+}
+
+.table-hover>tbody>tr:hover {
+    background-color: #f5f5f5;
+}
+
+.table tbody tr.success td {
+    background-color: #dff0d8;
+}
+
+th:first-child {
+    padding-left: 8px !important;
+}
+
+#container {
+    max-height: 300px;
+    overflow: auto;
+}
+
+.wavesurfer-annotations tr.wavesurfer-active td {
+    background-color: yellow;
+}
+
+.wavesurfer-time {
+    width: 100px;
+    color: #555;
+}
+
+.wavesurfer-tier-Text {
+    width: 500px;
+}
+
+td.wavesurfer-tier-Comments {
+    color: #999;
+}
+
+.wavesurfer-handle {
+    background-color: #c9e2b3;
+}
+
+.highlighted {
+    background-color: yellow;
+}
+
+span.success {
+    background-color: yellow;
+    font-size: larger;
+}
+
+span {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+input[type=range] {
+    width: 180px;
+    vertical-align: text-top;
+}
+
+input[type=range]::-moz-range-track {
+    height: 5px;
+    cursor: pointer;
+    box-shadow: 0px 0px 0px #000000;
+    background: #c800c8;
+    border-radius: 1px;
+    border: 0px solid #000000;
+}
+
+input[type=range]::-moz-range-thumb {
+    box-shadow: 0px 0px 0px #000000;
+    border: 1px solid #bb85bb;
+    height: 18px;
+    width: 10px;
+    border-radius: 25px;
+    background: #cbb9cb;
+    cursor: pointer;
+}
+
+.fixed_header {
+    table-layout: fixed;
+    border-collapse: collapse;
+}
+
+.fixed_header tbody {
+    display: block;
+    overflow: auto;
+    height: 220px;
+    width: 100%;
+}
+
+.fixed_header thead tr {
+    display: block;
+    width: 100%;
+}
+
+.fixed_header th,
+.fixed_header td {
+    padding: 5px;
+    text-align: left;
+}
+
+.fullWidth {
+    width: 100%;
+}

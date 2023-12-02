@@ -1,107 +1,182 @@
 <!DOCTYPE html>
-<html>
-
+<html lang="de">
   <head>
-    <meta charset='utf-8'>
-    <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <meta name="description" content="byAlxx.github.io : ">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>wavesurfer demo</title>
 
-    <!-- Stylesheet -->
-    <link rel="stylesheet" type="text/css" media="screen" href="css/stylesheet.css">
-    <!-- Include the AngularJS library -->
-    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.5/angular.min.js"></script>
-    <script src="bower_components/angular/angular.js"></script>
-    <title>byAlxx.github.io</title>
+    <link rel="shortcut icon" href="#" />
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css" />
+    <link
+      rel="stylesheet"
+      href="https://www.w3schools.com/lib/w3-colors-ios.css"
+    />
+    <link rel="icon" type="image/jpg" href="assets/image.png" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+      integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+
+    <!-- Wavesurfer 
+    <script
+      type="text/javascript"
+      src="/wavesurfer/node_modules/wavesurfer.js/dist/wavesurfer.min.js"
+    ></script>
+    <!-- Wavesurfer Regions 
+    <script
+      type="text/javascript"
+      src="/wavesurfer/node_modules/wavesurfer.js/dist/plugins/regions.min.js"
+    ></script>
+    <!-- Wavesurfer Minimap
+    <script
+      type="text/javascript"
+      src="/wavesurfer/node_modules/wavesurfer.js/dist/plugins/minimap.min.js"
+    ></script>
+
+    <!-- Jodit Text Editor -->
+    <link
+      type="text/css"
+      rel="stylesheet"
+      href="./node_modules/jodit/es2015/jodit.min.css"
+    />
+    <script
+      type="text/javascript"
+      src="./node_modules/jodit/es2015/jodit.min.js"
+    ></script>
+
+    <!-- JQuery -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
   </head>
 
-  <body ng-app="myApp">
+  <body id="body">
+    <div class="w3-container">
+      <br />
+      <hr />
+      <div class="w3-row">
+        <div id="audio-controls" class="w3-twothird w3-container w3-hide">
+          <label>
+            <button
+              class="w3-button w3-border w3-border-purple w3-round-xlarge"
+              id="audio-button"
+            >
+              <i id="play-pause-icon" class="fa fa-play"></i>
+            </button>
+            <b id="time-current">0.00</b> / <b id="time-total">0.00</b>
+          </label>
+          <label style="margin-left: 2em">
+            <input type="checkbox" checked="${loop}" />
+            Loop regions
+          </label>
+          <label style="margin-left: 2em">
+            Zoom: <input type="range" min="10" max="500" value="70" />
+          </label>
+          <label style="margin-left: 2em">
+            <span class="mute-btn btn">
+              <i class="fa-solid fa-volume-up"></i>
+              <i class="fa-solid fa-volume-mute"></i>
+            </span>
 
-    <!-- HEADER -->
-    <div id="header_wrap" class="outer">
-        <header class="inner">
-
-          <h1 id="project_title">byAlxx.github.io</h1>
-          <h2 id="project_tagline"></h2>
-
-        </header>
-    </div>
-
-    <div class="wrapper1">
-      <div class="container">
-        <canvas id="wheel"></canvas>
-        <button id="spin-btn">Spin</button>
-        <div id="needle">
-          <div class="circle"></div>
-          <div class="triangle-left"></div>
+            <input
+              type="range"
+              min="0"
+              max="1"
+              step="0.1"
+              value="0.5"
+              class="volume-slider"
+            />
+          </label>
+        </div>
+        <div class="w3-third w3-container">
+          <label class="w3-show" id="help" for="audio-file"
+            >Upload here:
+          </label>
+          <input id="audio-file" type="file" />
         </div>
       </div>
-      <div id="final-value">
-        <p>Click On The Spin Button To Start</p>
+      <br />
+      <div id="waveform1" class="w3-border w3-round-large"></div>
+      <br />
+      <div>
+        <table class="w3-table-all w3-card-4 fixed_header" id="audio-tracks">
+          <thead>
+            <tr class="w3-border w3-border-purple w3-text-purple">
+              <th>ID</th>
+              <th></th>
+              <th></th>
+              <th class="fullWidth"></th>
+              <th id="editHeader">Edit</th>
+              <th id="deleteHeader">Delete</th>
+            </tr>
+          </thead>
+          <tbody id="tbody"></tbody>
+          <tfoot></tfoot>
+        </table>
       </div>
-    </div>
-    <div class="wrapper2">
-      <div class="container">
-        <div class="input-items">
-          <div>Item1</div>
-          <div>Item2</div>
-          <div>Item3</div>
-        </div>
-        <div class="input-field">
-          <label for="input">Poll Items:</label>
-          <input type="text" name="input" id="input" />
-        </div>
+      <hr />
+      <br />
+      <div class="w3-container">
+        <div class="w3-hide" id="summary"></div>
       </div>
-    </div>
-
-    <div class="main" ng-controller="MainController">
-      <div class="container">
-        <h1>{{ title }}</h1>
-        <h2>{{ promo }}</h2>
-
-        <div ng-repeat="product in products" class="col-md-6">
-            
-          <div class="thumbnail">
-                <img ng-src="{{ product.cover }}" />     
-            <p class="title">{{ product.name }}</p>
-                
-            <p class="price">{{ product.price | currency }}</p>
-                
-            <p class="date">{{ product.pubdate | date }}</p>
-            <div class="rating">
-                
-              <p class="likes" ng-click="plusOne($index)">
-                + {{ product.likes }}
-              </p>
-              <p class="dislikes" ng-click="minusOne($index)">
-                - {{ product.dislikes }}
-              </p>
-            </div>
-              
-          </div>
+      <hr />
+      <br />
+      <div id="merge-option" class="w3-hide">
+        <button
+          class="w3-button w3-border w3-border-purple w3-round-xlarge"
+          onClick="mergeTrack()"
+        >
+          <i>Merge tracks</i>
+        </button>
+        <br /><br />
+        <div class="w3-row w3-hide" id="merged-track-div">
+          <b class="w3-col l1 w3-text-purple"><i>Merged Audio : </i></b>
+          <audio controls="controls" class="w3-col l11" id="merged-track">
+            <source src="" type="" />
+          </audio>
         </div>
       </div>
+      <div id="asr-option" class="w3-hide">
+        <button
+          class="w3-button w3-border w3-border-purple w3-round-xlarge"
+          id="transcribeButton"
+        >
+          <i>Transcribe audio file</i>
+        </button>
+        <br /><br />
+        <div class="w3-row w3-hide" id="merged-track-div">
+          <b class="w3-col l1 w3-text-purple"><i>Transcribed Audio : </i></b>
+          <audio controls="controls" class="w3-col l11" id="transcribed-track">
+            <source src="" type="" />
+          </audio>
+        </div>
+      </div>
+      <div id="karaoke-option" class="w3-hide">
+        <button
+          class="w3-button w3-border w3-border-purple w3-round-xlarge"
+          id="karaokeButton"
+        >
+          <i>Karoke-/Edit-Mode</i>
+        </button>
+      </div>
+      <br />
+      <div id="container" class="table-responsive">
+        <!-- Here be transcript -->
+      </div>
+      <br />
+      <section hidden id="control-center">
+        <button id="get-btn">GET Data</button>
+        <button id="post-btn">POST Data</button>
+      </section>
     </div>
 
-    <!-- FOOTER  -->
-    <div id="footer_wrap" class="outer">
-      <footer class="inner">
-        <p>Published with <a href="https://pages.github.com">GitHub Pages</a></p>
-      </footer>
-    </div>
-
-    <!-- Modules -->
-   <script src="js/app.js"></script>
-
-   <!-- Controllers -->
-   <script src="js/MainController.js"></script>
-
-   <!-- Directives -->
-
-   <!-- Chart JS -->
-   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
-   <!-- Chart JS Plugin for displaying text over chart -->
-   <script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-datalabels/2.1.0/chartjs-plugin-datalabels.min.js"></script>
-   <!-- Script -->
-   <script src="js/script.js"></script>
+    <!-- App -->
+    <script type="module" src="./script.js"></script>
   </body>
 </html>
