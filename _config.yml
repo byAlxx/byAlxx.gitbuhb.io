@@ -1,3 +1,4 @@
 theme: jekyll-theme-minimal
 title: byAlxx's homepage
 description: Bookmark this to keep an eye on my project updates!
+include: /node_modules
