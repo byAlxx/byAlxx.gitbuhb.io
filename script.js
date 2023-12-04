@@ -164,7 +164,7 @@ element1.addEventListener("change", () => {
     });
 
     // Loop a region on click
-    let loop = true;
+    let loop = false;
     // Toggle looping with a checkbox
     document.querySelector('input[type="checkbox"]').onclick = (e) => {
         loop = e.target.checked;
@@ -289,7 +289,7 @@ element1.addEventListener("change", () => {
                     let row = document.getElementById(activeRegion.id);
                     let before = row.previousSibling;
                     if (before) {
-                        container.scrollTop = before.offsetTop + 50; // Damit immer erste Zeile oben; height = 50px je Zeile
+                        container.scrollTop = before.offsetTop;// + 50; // Damit immer erste Zeile oben; height = 50px je Zeile
                     }
                 }
             }
@@ -360,11 +360,13 @@ function deleteTrack(regionId) {
     track.parentNode.removeChild(track);
     wavesurferRegions.regions.forEach(element => {
         if (element.id == regionId) {
+            // delete from srt etc.
+            srt_array.splice(element.content - 1, 1);
+            // delete region
             element.remove();
         }
     });
     //showAndHideMergeOption();
-    // FIXME delete from srt etc.
 }
 
 var wordCounter = 0;
@@ -406,7 +408,6 @@ function createAudioRow(arr) {
                 // console.log("Erneut leere Zeile");
             } else {
                 // console.log(srt_array);
-                // TODO Hier muss Highlight Parsing mit rein
                 // FIXME wordCount darf nicht immer wieder von vorne beginnen
                 srt_array.forEach((segment) => {
                     if (arr[i].innerText == segment.id) {
@@ -566,10 +567,14 @@ async function getTranscript(audioFile, textFile) {
                                 // Davor Abgleich mit alter XML damit Stelle ersetzt?
                                 xmlData = parseElan(xml2Response);
                                 render();
-                                // FIXME Create new region(?) + Update ELAN Segment? -> neues SRT Parsing
+                                // Create new region(?) + Update ELAN Segment? -> neues SRT Parsing
                                 //var resultFile = new File(data, "result.txt"); 
                                 //console.log(resultFile);
                                 //console.log("--- " + (Date.now() - start_time) / 1000 + " seconds ---");
+                                // hide technical challenges
+                                // var loadingPopUp = document.getElementById("loadingPopUp");
+                                // var loadingPopUpClass = loadingPopUp.getAttribute("class").replace("w3-show", "w3-hide");
+                                // loadingPopUp.setAttribute("class", loadingPopUpClass);
                             })
                             .catch(err => console.error("Error am Ende: " + err));
 
@@ -799,7 +804,7 @@ function render() {
     //renderedAlignable = data.alignableAnnotations;
     //console.log(renderedAlignable);
 
-    // TODO Not needed because each segment row needs to be filled?
+    // Not needed because each segment row needs to be filled?
     // table
     /*const table = document.createElement('table');
     table.className = 'wavesurfer-annotations';
@@ -856,19 +861,31 @@ function render() {
     });
     */
     // FIXME Make Container for each Segment?
+    // array.splice(start, deleteCount, item1, item2, ..., itemN)
+    // array is the array that you want to modify.
+    // start is the index where you want to start modifying the array.
+    // deleteCount is the number of elements you want to remove from the array, starting at the start index.
+    // item1, item2, and so on are the elements you want to add to the array at the start index.   
     renderedAlignableArray.push(renderedAlignable);
-    console.log(renderedAlignableArray);
+    // console.log(renderedAlignableArray);
     //container.innerHTML = '';
     //container.appendChild(table);
 }
 
 var renderedAlignableArray = new Array(); // For each segment push the Segment MAUS Words
 
+var currentSeg;
 function getRenderedAnnotation(time) {
     let result = false;
     var zeitverschiebung;
 
-    // Check if used with generated WhisperAI transcript
+    wavesurferRegions.regions.forEach((region) => {
+        if (region.start <= time && region.end >= time) {
+            currentSeg = parseInt(region.content.innerText);
+        }
+    });
+
+    // Check if used with fully generated WhisperAI transcript (var transcribed)
     if (!transcribed) {
         wavesurferRegions.regions.forEach((region) => {
             if (region.start <= time && region.end >= time) {
@@ -903,6 +920,7 @@ function getRenderedAnnotation(time) {
     // console.log(renderedAlignable);
     // console.log("renderedAlignableArray");
     // console.log(renderedAlignableArray);
+    // console.log(result);
 
     return result;
 }
@@ -914,16 +932,30 @@ function getAnnotationNode(annotation) {
     //return document.getElementById(
     //    'wavesurfer-alignable-' + annotation.id
     //);
-    // TODO changed to 'segment-' + region.id + word -> da wir im Segment suchen wollen / erst im Karaoke Modus geht das
-    if (karaokeMode) {
+    console.log(annotation);
+    if (karaokeMode || transcribed) {
         return document.getElementById(
             'word-' + annotation.id
         );
     } else {
-        console.log(annotation);
         return document.getElementById(
-            'word-' + annotation.id// + prevWordCount
+            'word-' + annotation.id
         );
+        // TODO changed to 'segment-' + region.id + word -> da wir im Segment suchen wollen / erst im Karaoke Modus geht das
+        // // console.log(annotation);
+        // var segment = document.getElementById('segment-' + currentSeg);
+        // segment.childNodes.forEach(wordNode => {
+        //     if (wordNode.id == 'word-' + annotation.id) {
+        //         console.log(document.getElementById(
+        //             'word-' + annotation.id
+        //         ));
+        //         console.log(wordNode);
+        //         return wordNode;
+        //     }
+        // });
+        // return document.getElementById(
+        //     'word-' + annotation.id// + prevWordCount
+        // );
     }
 }
 
@@ -946,9 +978,11 @@ const parser = new srtParser2();
 
 // FIXME Check for ELAN Renderer
 function parseSRT(srt_string) {
+    // segMegaString = srt_string;
     srt_array = parser.fromSrt(srt_string);
-    console.log(srt_array);
+    // console.log(srt_array);
 
+    // TODO wordCounter just for each segment
     var wordCounter = 0;
     srt_array.forEach((element) => {
         createRegion(element.id, element.startSeconds, element.endSeconds, element.text);
@@ -970,14 +1004,19 @@ function parseSRT(srt_string) {
         // TODO create for each segment visible XML Words to sync with audio but not from summary, more likely into each segment
         //document.createElement("div");
     });
+    // segMegaString = parser.toSrt(srt_array);;
 }
 
 function startEditing(tableRow) {
     //console.log(tableRow.children[3]);
     // Insert Transcript + Editor
     var text = tableRow.children[3].innerText;
-    // TODO remove HTML from text;
     var id = "#" + tableRow.id + "3";
+
+    // TODO remodel Regions when editing transcript
+    // var region = wavesurferRegions.regions[0];
+    // region.setOptions({ drag: true, resize: true, color: "#ff0000" });
+    // console.log(region);
 
     // Create new Jodit Editor
     const editor1 = Jodit.make(id, {
@@ -1016,10 +1055,15 @@ var segStringArray = new Array();
 var segMegaString = "";
 
 function updateTranscript(id, text) {
-    var segId = parseInt(document.getElementById(id + "0").innerText); // FIXME nicht ID, da nicht mehr im Textfeld sondern vorderstes Element
+    var segId = parseInt(document.getElementById(id + "0").innerText);
     var newText = text;
 
     // Existing srt_array from generated transcript
+    // if (srt_array != undefined) {
+    //     var srt_string = parser.toSrt(srt_array);
+    //     console.log(srt_string);
+    //     parseSRT(srt_string);
+    // }
     if (srt_array != undefined && srt_array.length == wavesurferRegions.regions.length) {
         // Changing srt_array specific segment
         srt_array.forEach((segment) => {
@@ -1073,6 +1117,8 @@ function updateTranscript(id, text) {
     //     parseSRT(seg);
     // });
 
+    // console.log(srt_array);
+
     // FIXME den Teil hier einfach oben rein packen, wo segMegaString entsteht
     if (segMegaString || srt_array == undefined) {
         parseSRT(segMegaString);
@@ -1083,9 +1129,9 @@ function updateTranscript(id, text) {
         console.log(srt_string);
         parseSRT(srt_string);
         srt_array = parser.fromSrt(srt_string);
-        // console.log(srt_array);
+        // 
     }
-
+    // console.log(srt_array);
     // turn array back to SRT string.
     //console.log(segArray);
     //if (srt_array == undefined) {
@@ -1097,6 +1143,10 @@ function updateTranscript(id, text) {
 var audioSegFile, textSegFile, done;
 async function checkSegment(id, text) {
     console.log("Making Segment Check");
+    // TODO disguise technic behind app
+    // var loadingPopUp = document.getElementById("loadingPopUp");
+    // var loadingPopUpClass = loadingPopUp.getAttribute("class").replace("w3-hide", "w3-show");
+    // loadingPopUp.setAttribute("class", loadingPopUpClass);
     var blob = new Blob([text], { type: "text/txt" });
     textSegFile = new File([blob], 'output.txt', { type: "text/txt" });
 
@@ -1109,7 +1159,6 @@ async function checkSegment(id, text) {
     done = true;
 }
 
-// TODO create loading symbol so nothing interrupts
 function startCheckUp(audio, text) {
     if (done) {
         getTranscript(audio, text);
@@ -1269,4 +1318,41 @@ function openKaraokeDisplay(isKaraokeMode) {
         document.getElementById("audio-tracks").classList.add("w3-hide");
         karaokeMode = true;
     }
+}
+
+
+// User Testing Cases
+var select = document.getElementById("task-select");
+select.onchange = function () {
+    var selIndex = select.selectedIndex;
+    // var selValue = select[selIndex].innerHTML;
+    console.log(selIndex);
+    switch (selIndex) {
+        case 1:
+
+            break;
+        case 2:
+            loadHalfSRTTranscript();
+            load("./audio/partly1.xml");
+            document.getElementById("asr-option").classList.remove("w3-show");
+            document.getElementById("asr-option").classList.add("w3-hide");
+            break;
+        case 3:
+            document.getElementById("asr-option").classList.remove("w3-show");
+            document.getElementById("asr-option").classList.add("w3-hide");
+            break;
+
+        default:
+            break;
+    }
+}
+
+function loadHalfSRTTranscript() {
+    fetch("audio/partly1.srt").then(function (response) {
+        return response.text();
+    }).then(function (data) {
+        parseSRT(data);
+    }).catch(function (error) {
+        console.log("error: " + error);
+    });
 }

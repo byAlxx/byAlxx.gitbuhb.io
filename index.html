@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>wavesurfer demo</title>
+    <title>TScribe - Demo</title>
 
     <link rel="shortcut icon" href="#" />
     <link rel="stylesheet" href="style.css" />
@@ -12,7 +12,7 @@
       rel="stylesheet"
       href="https://www.w3schools.com/lib/w3-colors-ios.css"
     />
-    <link rel="icon" type="image/jpg" href="assets/image.png" />
+    <link rel="icon" type="image/png" href="assets/image5.png" />
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
@@ -25,20 +25,20 @@
       referrerpolicy="no-referrer"
     />
 
-    <!-- Wavesurfer -->
+    <!-- Wavesurfer 
     <script
       type="text/javascript"
-      src="./node_modules/wavesurfer.js/dist/wavesurfer.min.js"
+      src="/wavesurfer/node_modules/wavesurfer.js/dist/wavesurfer.min.js"
     ></script>
-    <!-- Wavesurfer Regions -->
+    <!-- Wavesurfer Regions 
     <script
       type="text/javascript"
-      src="./node_modules/wavesurfer.js/dist/plugins/regions.min.js"
+      src="/wavesurfer/node_modules/wavesurfer.js/dist/plugins/regions.min.js"
     ></script>
-    <!-- Wavesurfer Minimap -->
+    <!-- Wavesurfer Minimap
     <script
       type="text/javascript"
-      src="./node_modules/wavesurfer.js/dist/plugins/minimap.min.js"
+      src="/wavesurfer/node_modules/wavesurfer.js/dist/plugins/minimap.min.js"
     ></script>
 
     <!-- Jodit Text Editor -->
@@ -57,7 +57,28 @@
   </head>
 
   <body id="body">
+    <div id="loadingPopUp" class="w3-hide">
+      <div id="loadingPopUp-content">Checking Transcript Input...</div>
+      <img
+        id="loadingCircle"
+        src="assets/loading-purple.gif"
+        alt="loading circle"
+      />
+    </div>
     <div class="w3-container">
+      <div id="demoHelper">
+        <h1>After uploading audio file, please select specific task</h1>
+        <select name="tasks" id="task-select">
+          <option value="">-- Please choose an option --</option>
+          <option value="task1">
+            Task 1: Explore with finished generated transcript
+          </option>
+          <option value="task2">
+            Task 2: Work with partly finished transcript
+          </option>
+          <option value="task3">Task 3: Try transcribe on your own</option>
+        </select>
+      </div>
       <br />
       <hr />
       <div class="w3-row">
@@ -72,7 +93,7 @@
             <b id="time-current">0.00</b> / <b id="time-total">0.00</b>
           </label>
           <label style="margin-left: 2em">
-            <input type="checkbox" checked="${loop}" />
+            <input type="checkbox" />
             Loop regions
           </label>
           <label style="margin-left: 2em">
@@ -98,7 +119,7 @@
           <label class="w3-show" id="help" for="audio-file"
             >Upload here:
           </label>
-          <input id="audio-file" type="file" />
+          <input id="audio-file" type="file" value="./audio/part1.mp3" />
         </div>
       </div>
       <br />
