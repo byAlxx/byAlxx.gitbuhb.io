@@ -1380,3 +1380,5 @@ btn.addEventListener(("click"), function downloadTranscript() {
     anchorAudio.click();
     // console.log(anchorAudio);
 });
+
+// Load
