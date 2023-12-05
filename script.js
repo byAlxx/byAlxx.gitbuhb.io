@@ -1329,7 +1329,10 @@ select.onchange = function () {
     console.log(selIndex);
     switch (selIndex) {
         case 1:
-
+            loadWhisperAISRTTranscript();
+            load("./audio/part1.xml");
+            transcribed = true;
+            showAndHideTranscribeOption();
             break;
         case 2:
             loadHalfSRTTranscript();
@@ -1356,3 +1359,24 @@ function loadHalfSRTTranscript() {
         console.log("error: " + error);
     });
 }
+
+var audioBtn = document.getElementById("downloadAudioButton");
+audioBtn.addEventListener(("click"), function downloadAudioFile() {
+    var anchorAudio = document.createElement("a");
+    anchorAudio.href = "audio/part1.mp3";
+    anchorAudio.download = "part1.mp3";
+    anchorAudio.click();
+    // console.log(anchorAudio);
+});
+
+var btn = document.getElementById("downloadButton");
+btn.addEventListener(("click"), function downloadTranscript() {
+    var anchorAudio = document.createElement("a");
+    var text = parser.toSrt(srt_array);
+    // console.log(text);
+    var blob = new Blob([text], { type: "text/txt" });
+    anchorAudio.href = URL.createObjectURL(blob);
+    anchorAudio.download = "output.txt";
+    anchorAudio.click();
+    // console.log(anchorAudio);
+});

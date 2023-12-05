@@ -203,3 +203,7 @@ input[type=range]::-moz-range-thumb {
     margin-top: 30px;
     /* 30px top margin to avoid conflict with the close button on smaller screens */
 }
+
+#download-options {
+    margin-top: 3em;
+}

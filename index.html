@@ -7,13 +7,14 @@
 
     <link rel="shortcut icon" href="#" />
     <link rel="stylesheet" href="style.css" />
-    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css" />
-    <link
+    <link rel="stylesheet" href="stylew3.css" />
+    <!-- <link
       rel="stylesheet"
       href="https://www.w3schools.com/lib/w3-colors-ios.css"
-    />
+    /> -->
     <link rel="icon" type="image/png" href="assets/image5.png" />
-    <link
+    <link rel="stylesheet" href="font-awesome/css/all.css" />
+    <!-- <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
     />
@@ -23,7 +24,7 @@
       integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
       crossorigin="anonymous"
       referrerpolicy="no-referrer"
-    />
+    /> -->
 
     <!-- Wavesurfer 
     <script
@@ -53,7 +54,7 @@
     ></script>
 
     <!-- JQuery -->
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <!-- <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script> -->
   </head>
 
   <body id="body">
@@ -66,18 +67,34 @@
       />
     </div>
     <div class="w3-container">
-      <div id="demoHelper">
-        <h1>After uploading audio file, please select specific task</h1>
-        <select name="tasks" id="task-select">
-          <option value="">-- Please choose an option --</option>
-          <option value="task1">
-            Task 1: Explore with finished generated transcript
-          </option>
-          <option value="task2">
-            Task 2: Work with partly finished transcript
-          </option>
-          <option value="task3">Task 3: Try transcribe on your own</option>
-        </select>
+      <div class="w3-row" id="demoHelper">
+        <div class="w3-twothird w3-container">
+          <h1>After uploading audio file, please select specific task</h1>
+          <select name="tasks" id="task-select">
+            <option value="">-- Please choose an option --</option>
+            <option value="task1">
+              Task 1: Explore with finished generated transcript
+            </option>
+            <option value="task2">
+              Task 2: Work with partly finished transcript
+            </option>
+            <option value="task3">Task 3: Try transcribe on your own</option>
+          </select>
+        </div>
+        <div id="download-options" class="w3-third w3-container">
+          <button
+            class="w3-button w3-border w3-border-purple w3-round-xlarge"
+            id="downloadAudioButton"
+          >
+            <i>Download Audio File</i>
+          </button>
+          <button
+            class="w3-button w3-border w3-border-purple w3-round-xlarge"
+            id="downloadButton"
+          >
+            <i>Download Transcript</i>
+          </button>
+        </div>
       </div>
       <br />
       <hr />
